@@ -1,0 +1,58 @@
+﻿@model LoginInputModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link href="~/css/login.css" rel="stylesheet" id="bootstrap-css">
+
+</head>
+
+<body>
+
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+
+      <!-- Icon -->
+      @* <div class="fadeIn first">
+        <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+      </div> *@
+
+      <!-- Login Form -->
+      <form method="post">
+
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+        <input asp-for="EmailAddress" type="text" id="login" class="fadeIn second" placeholder="kullanıcı adınız">
+        <input asp-for="Password" type="text" id="password" class="fadeIn third"  placeholder="parola">
+        <div class="form-check">
+          <input asp-for="RememberMe" class="form-check-input" type="checkbox" asp-for="SendSMS" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            Beni Hatırla ?
+          </label>
+        </div>
+        <input type="submit" class="fadeIn fourth" value="Oturum Aç">
+      </form>
+
+      <!-- Remind Passowrd -->
+      @* <div id="formFooter">
+        <a class="underlineHover" href="#">Forgot Password?</a>
+        </div> *@
+
+    </div>
+  </div>
+
+
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+</body>
+
+</html>

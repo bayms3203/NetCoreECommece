@@ -1,0 +1,295 @@
+@{
+    ViewData["Title"] = "Satın Al";
+}
+
+
+
+@model OrderInputModel
+
+
+
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        @ViewBag.OrderStatus
+        @ViewBag.OrderCode
+    </div>
+
+    <div class="row">
+
+        <div class="col-8">
+            <h2>Sipariş Formu</h2>
+            <form method="POST" action="DoOrder">
+
+
+                <div class="text-danger" asp-validation-summary="All"></div>
+
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#customerStep">Müşteri Bilgileri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#creditStep"> Kredi Kartı </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#orderStep"> Sipariş Ver </a>
+                    </li>
+                </ul>
+
+
+                <div class="tab-content mt-5">
+                    <div class="tab-pane container active" id="customerStep">
+
+
+                        <input type="hidden" asp-for="CustomerDetail.CustomerId">
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" asp-for="CustomerDetail.FullName"
+                                        placeholder="Müşteri Adsoyad" type="text" />
+                                </div>
+
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input id="phoneNumber" class="form-control" asp-for="CustomerDetail.PhoneNumber"
+                                        placeholder="Telefon" />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="form-group">
+                                    <textarea class="form-control" asp-for="CustomerDetail.ShipAddress" rows="5"
+                                        cols="10" placeholder="Sipariş Adresi"></textarea>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row  float-right mr-2">
+
+                            <button class="btn btn-primary" onclick="GotoNext('creditStep')"> Next >> </button>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane container fade" id="creditStep">
+
+                        <div class="row">
+                            <div class="col">
+
+
+
+                                <div class="form-group">
+                                    <input class="form-control" asp-for="CreditDetail.CardUser"
+                                        placeholder="Kredi Kartı Sahibi"></textarea>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+
+
+
+                                <div class="form-group">
+                                    <input id="creditNumber" class="form-control" asp-for="CreditDetail.Credit"
+                                        placeholder="Kart Numarası"></textarea>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input id="validThru" class="form-control" asp-for="CreditDetail.ValidThru"
+                                        placeholder="Son Kullanama Tarihi" />
+                                </div>
+
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input id="cvv" id="phoneNumber" class="form-control" asp-for="CreditDetail.CVV"
+                                        placeholder="Güvenlik Kodu" />
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="row  float-right mr-2">
+                            <button class="btn btn-secondary" onclick="GotoPrev('customerStep')"> Prev << </button>
+                                    &nbsp;
+                                    <button class="btn btn-primary" onclick="GotoNext('orderStep')"> Next >> </button>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane container fade" id="orderStep">
+
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="SendSMS" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Send SMS ?
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="SendEmail" id="flexCheckChecked"
+                                checked>
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Send Email ?
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input id="licenceAggrement" class="form-check-input" type="checkbox"
+                                asp-for="AcceptAggrement" onchange="ReadAggrement()" id="flexCheckChecked">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Licence Aggrement ?
+                            </label>
+                        </div>
+
+
+                        <div class="row  float-right mr-2">
+                            <button class="btn btn-secondary" onclick="GotoPrev('creditStep')"> Prev << </button>
+                                    &nbsp;
+                                    <input disabled id="btnDoOrder" type="submit" class="btn btn-success"
+                                        value="Sipariş Ver">
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </form>
+        </div>
+
+        <div class="col-4">
+            <vc:cart-detail></vc:cart-detail>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<button style="visibility: hidden;" id="btnOpenAggrement" type="button" class="btn btn-primary" data-toggle="modal"
+    data-target="#licenceAggrementModal">
+    Open modal
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="licenceAggrementModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Lisans Sözleşmesi</h4>
+                <button id="btnClose" type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Lisans sözleşmesini okudum ve onaylıyorum.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="btnAggree" type="button" class="btn btn-primary" data-dismiss="modal">Aggree</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js" type="text/javascript"></script>
+
+<script>
+    $(document).ready(function () {
+        DoMaskInput();
+    })
+
+
+    function DoMaskInput() {
+
+        $('#phoneNumber').mask('(0)-000-000-00-00');
+        $('#creditNumber').mask('0000-0000-0000-0000', { reverse: true });
+        $('#validThru').mask('00/00');
+        $('#cvv').mask('000');
+    }
+
+
+
+
+    function GotoNext(nextStepId) {
+        event.preventDefault();
+
+        $(`a[href="#${nextStepId}"]`).trigger('click');
+    }
+
+    function GotoPrev(prevStepId) {
+        event.preventDefault();
+        $(`a[href="#${prevStepId}"]`).trigger('click');
+    }
+
+
+    function ReadAggrement() {
+
+        const currentState = $('#licenceAggrement').prop('checked'); // true yada false olarak döner.# // prop bize disabled yada checked gibi değerlerin değişimi veriyor.
+
+        console.log('ReadAggrement', currentState);
+
+        if (currentState) {
+            console.log('btn', $("#btnOpenAggrement"));
+            $('#btnOpenAggrement').trigger('click'); // modali aç
+        }
+        else {
+            $('#btnDoOrder').prop('disabled', true); // sipariş butonunu kullanıma kapat
+        }
+
+    }
+
+
+    $('#btnClose').click(function () {
+        $('#licenceAggrement').prop('checked', false); // true olarak seçilen sözleşme kabul edilmediyse false çek
+        $('#btnDoOrder').prop('disabled', true);
+
+    })
+
+
+    $('#btnAggree').click(function () {
+        $('#btnDoOrder').prop('disabled', false);
+
+    })
+
+    $('#btnCancel').click(function () {
+        $('#licenceAggrement').prop('checked', false); // true olarak seçilen sözleşme kabul edilmediyse false çek
+        $('#btnDoOrder').prop('disabled', true);
+
+    })
+
+
+
+</script>
+}

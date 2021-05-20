@@ -1,0 +1,15 @@
+{
+    "version": "1.0",
+    "defaultProvider": "cdnjs",
+    "libraries": [
+      {
+        "library": "jquery-mask",
+        "files": [
+          "jquery.mask.min.js",
+          "jquery.mask.js",
+          "jquery.mask.min.map"
+        ],
+        "destination": "wwwroot/assets/jquery.mask/"
+      }
+    ]
+  }

@@ -1,0 +1,84 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+
+@model TestMVCApp.Models.ProductListVM
+
+
+@* ürünler liste halinde burda listelensin ve o listenin içerisinde aşağıdaki tasarımı kullanarak seoete ekle butonuna
+  basılınca cart controllerdaki AddtoCart methodunu çalıştırmaya çalışalım *@
+
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-8">
+
+      <div class="row">
+        @foreach (var item in Model.Products)
+        {
+          <div class="col-4 mb-2">
+            <div class="card">
+
+              <img src="/assets/images/product-test.jpeg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text">
+                  @item.ListPrice TL
+                </p>
+                <p>
+                  <label for="productQuantity_@item.Id">Adet : </label>
+                  <input class="ml-2" id="productQuantity_@item.Id" type="number" placeholder="Ürün adeti" min="1"
+                  max="10" value="1">
+                </p>
+                <button onclick="AddtoCart('@item.Id')" href="#" class="btn btn-primary">Sepete Ekle</button>
+              </div>
+
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+
+
+    <div class="col-4">
+
+      @* birden fazla yerde kullacağımız bir html varsa ve bu html dinamik olarak bir datasource üzerinden doluyorsa bu gibi durumlar için view component kullanırız  *@
+
+      @* @await Component.InvokeAsync("CartDetail") *@
+
+      @* normal html formatı dışındaki çağırma *@
+
+      <vc:cart-detail></vc:cart-detail>
+
+      @* html formatındaki çağırma şekli *@
+
+     
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+@section Scripts {
+
+<script src="~/js/cart.js"></script>
+
+}
+
+
+
+
+
+@* ajax ile sepete eklenen ürünü Cart controllerdaki AddtChart methoduna post edelim. CartItem formatında olmalıdır. *@
